@@ -3,11 +3,8 @@ const router = require("express").Router();
 const album = require("../models/album")
 
 router.get("/getAll", async (req, res) => {
-  const options = {
-    sort: {createdAt: 1}
-  };
-
-  const cursor = await album.find(options);
+  const options = {  };
+  const cursor = await album.find(options).sort({createdAt: 1});
   if (cursor) {
     return res.status(200).send({ success: true, data: cursor });
   } else {

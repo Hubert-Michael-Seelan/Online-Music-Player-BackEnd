@@ -28,14 +28,8 @@ router.get("/login", async (req, res) => {
 });
 
 router.get("/getUsers", async (req, res) => {
-  const options = {
-    // sort returned documents in ascending order
-    sort: { createdAt: 1 },
-    // Include only the following
-    // projection : {}
-  };
-
-  const cursor = await user.find(options);
+  const options = { };
+  const cursor = await user.find(options).sort({ createdAt: 1 });
   if (cursor) {
     res.status(200).send({ success: true, data: cursor });
   } else {

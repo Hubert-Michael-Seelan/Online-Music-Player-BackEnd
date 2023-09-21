@@ -3,12 +3,8 @@ const router = require("express").Router();
 const artist = require("../models/artist");
 
 router.get("/getAll", async (req, res) =>{
-  const options = {
-    sort: {
-      createdAt : 1
-    },
-  };
-  const cursor = await artist.find(options);
+  const options = { };
+  const cursor = await artist.find(options).sort({createdAt : 1});
   if (cursor){
     return res.status(200).send({success: true, artist: cursor});
   }else{
