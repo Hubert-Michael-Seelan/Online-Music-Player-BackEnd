@@ -2,21 +2,19 @@ const router = require("express").Router();
 
 const artist = require("../models/artist");
 
-router.get("/getAll", async (req, res) => {
+router.get("/getAll", async (req, res) =>{
   const options = {
-    // sort returned documents in ascending order
-    sort: { createdAt: 1 },
-    // Include only the following
-    // projection : {}
+    sort: {
+      createdAt : 1
+    },
   };
-
   const cursor = await artist.find(options);
-  if (cursor) {
-    res.status(200).send({ success: true, artist: cursor });
-  } else {
-    res.status(200).send({ success: false, msg: "No Data Found" });
+  if (cursor){
+    return res.status(200).send({success: true, artist: cursor});
+  }else{
+    return res.status(400).send({success: false, msg: "data not found"})
   }
-});
+})
 
 
 router.get("/getOne/:getOne", async (req, res) => {

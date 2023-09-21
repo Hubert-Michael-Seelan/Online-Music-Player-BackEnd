@@ -27,6 +27,22 @@ router.get("/login", async (req, res) => {
   }
 });
 
+router.get("/getUsers", async (req, res) => {
+  const options = {
+    // sort returned documents in ascending order
+    sort: { createdAt: 1 },
+    // Include only the following
+    // projection : {}
+  };
+
+  const cursor = await user.find(options);
+  if (cursor) {
+    res.status(200).send({ success: true, data: cursor });
+  } else {
+    res.status(200).send({ success: true, msg: "No Data Found" });
+  }
+});
+
 const newUserData = async (decodeValue, req, res) => {
   const newUser = new user({
     name: decodeValue.name,

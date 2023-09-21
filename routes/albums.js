@@ -4,15 +4,12 @@ const album = require("../models/album")
 
 router.get("/getAll", async (req, res) => {
   const options = {
-    // sort returned documents in ascending order
-    sort: { createdAt: 1 },
-    // Include only the following
-    // projection : {}
+    sort: {createdAt: 1}
   };
 
   const cursor = await album.find(options);
   if (cursor) {
-    res.status(200).send({ success: true, data: cursor });
+    return res.status(200).send({ success: true, data: cursor });
   } else {
     res.status(200).send({ success: false, msg: "No Data Found" });
   }
