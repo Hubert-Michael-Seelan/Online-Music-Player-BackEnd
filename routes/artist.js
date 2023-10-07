@@ -6,7 +6,7 @@ router.get("/getAll", async (req, res) =>{
   const options = { };
   const cursor = await artist.find(options).sort({createdAt : 1});
   if (cursor){
-    return res.status(200).send({success: true, artist: cursor});
+    return res.status(200).send({success: true, data: cursor});
   }else{
     return res.status(400).send({success: false, msg: "data not found"})
   }
@@ -19,7 +19,7 @@ router.get("/getOne/:getOne", async (req, res) => {
   const cursor = await artist.findOne(filter);
 
   if (cursor) {
-    res.status(200).send({ success: true, artist: cursor });
+    res.status(200).send({ success: true, data: cursor });
   } else {
     res.status(200).send({ success: false, msg: "No Data Found" });
   }
