@@ -2,8 +2,6 @@ const router = require("express").Router();
 const admin = require("../config/firebase.config");
 const user = require("../models/user");
 
-
-
 router.get("/login", async (req, res) => {
   if (!req.headers.authorization) {
     return res.status(500).send({ message: "Invalid Token" });
@@ -28,7 +26,7 @@ router.get("/login", async (req, res) => {
 });
 
 router.get("/getUsers", async (req, res) => {
-  const options = { };
+  const options = {};
   const cursor = await user.find(options).sort({ createdAt: 1 });
   if (cursor) {
     res.status(200).send({ success: true, data: cursor });
@@ -46,14 +44,14 @@ const newUserData = async (decodeValue, req, res) => {
     email_verfied: decodeValue.email_verified,
     role: "member",
     auth_time: decodeValue.auth_time,
-  })
+  });
   try {
     const savedUser = await newUser.save();
-    res.status(200).send({user: savedUser})
+    res.status(200).send({ user: savedUser });
   } catch (err) {
-    res.status(400).send({success: false, msg: err})
+    res.status(400).send({ success: false, msg: err });
   }
-}
+};
 const updateUserData = async (decodeValue, req, res) => {
   const filter = { user_id: decodeValue.user_id };
   const options = {
@@ -71,4 +69,28 @@ const updateUserData = async (decodeValue, req, res) => {
     res.status(400).send({ success: false, msg: err });
   }
 };
+router.put("/updateRole/:userId", async (req, res) => {
+  console.log(req.body.data.role, req.params.userId);
+  const filter = { _id: req.params.userId };
+  const role = req.body.data.role;
+  const options = {
+    upsert: true,
+    new: true,
+  };
+  try {
+    const result = await user.findOneAndUpdate(filter, { role: role }, options);
+    res.status(200).send({ user: result });
+  } catch (err) {
+    res.status(400).send({ success: false, msg: err });
+  }
+});
+router.delete("/delete/:userId", async (req, res) => {
+  const filter = { _id: req.params.userId };
+  const result = await user.deleteOne(filter);
+  if (result.deletedCount === 1) {
+    res.status(200).send({ success: true, msg: "Data Deleted" });
+  } else {
+    res.status(500).send({ success: false, msg: "Data Not Found" });
+  }
+});
 module.exports = router;
